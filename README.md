@@ -22,45 +22,45 @@ Principales frameworks/librerias utilizados:
 * KAFKA
 
 La aplicacion se conecta a un broker de Kafka configurado en el fichero application.yml:
-
+```yaml
 spring:
-	kafka:
-		bootstrap-servers: localhost:9092
-		
+    kafka:
+        bootstrap-servers: localhost:9092
+```
 * POSTGRESQL
 
 El consumer de Kafka persiste los datos en una base de datos PostgreSQL, cuya conexión también se configura en el fichero application.yml:
-
+```yaml
 spring:
-	datasource:        
-        driver-class-name: org.postgresql.Driver
-        jdbc-url: jdbc:postgresql://localhost:5439/postgres
-        username: postgres
-        password: 
-        minimumIdle: 10
-        maximumPoolSize: 100
-        maxLifetime: 3600000   
-
+    datasource:        
+    driver-class-name: org.postgresql.Driver
+    jdbc-url: jdbc:postgresql://localhost:5439/postgres
+    username: postgres
+    password: 
+    minimumIdle: 10
+    maximumPoolSize: 100
+    maxLifetime: 3600000   
+```
 Creación de schema y tablas en Base de datos PostgreSQL:
 
+```sql
 CREATE SCHEMA IF NOT EXISTS "PUBLIC";
 
 CREATE SEQUENCE secuencia_id_busqueda;
 
-CREATE TABLE IF NOT EXISTS "PUBLIC"."BUSQUEDAS"
-    (
-        SEARCH_ID BIGINT NOT NULL,
-        HOTEL_ID VARCHAR(20) NOT NULL,
+CREATE TABLE IF NOT EXISTS "PUBLIC"."BUSQUEDAS" (
+	SEARCH_ID BIGINT NOT NULL,
+ 	HOTEL_ID VARCHAR(20) NOT NULL,
         CHECK_IN VARCHAR(20) NOT NULL,
         CHECK_OUT VARCHAR(20) NOT NULL,
         CONSTRAINT BUSQUEDAS_PK PRIMARY KEY (SEARCH_ID)
-    );
+);
 
-CREATE TABLE IF NOT EXISTS "PUBLIC"."BUSQUEDAS_EDADES"
-    (
+CREATE TABLE IF NOT EXISTS "PUBLIC"."BUSQUEDAS_EDADES" (
         ID_BUSQUEDAS_EDADES INTEGER GENERATED ALWAYS AS IDENTITY,
         SEARCH_ID INTEGER,
         AGE INTEGER,
-        CONSTRAINT BUSQUEDAS_EDADES_pk PRIMARY KEY (ID_BUSQUEDAS_EDADES),
-        CONSTRAINT BUSQUEDASEDADES_FK1 FOREIGN KEY (SEARCH_ID) REFERENCES "PUBLIC"."BUSQUEDAS"(SEARCH_ID)
-    );
+	CONSTRAINT BUSQUEDAS_EDADES_pk PRIMARY KEY (ID_BUSQUEDAS_EDADES),
+	CONSTRAINT BUSQUEDASEDADES_FK1 FOREIGN KEY (SEARCH_ID) REFERENCES "PUBLIC"."BUSQUEDAS"(SEARCH_ID)
+);
+```
