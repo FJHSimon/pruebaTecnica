@@ -13,12 +13,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import com.prueba.busqueda.infra.endpoint.validation.ValidarRangoFechas.RangoFechasValidator;
 
 import static java.lang.annotation.ElementType.*;
 import static com.prueba.busqueda.shared.constantes.Errores.*;
+import static com.prueba.busqueda.shared.constantes.Constantes.FORMATO_FECHA_VALIDATOR;
 
 
 /**
@@ -47,13 +47,13 @@ public @interface ValidarRangoFechas {
             
             if (value != null) {
                 try {
-                    fechaCheckIn = LocalDate.parse(value.getCheckIn(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                    fechaCheckIn = LocalDate.parse(value.getCheckIn(), FORMATO_FECHA_VALIDATOR);
                 } catch (DateTimeParseException e) {
                     throw new DataException(ERROR_FECHA_CHECKIN_NOVALIDA);
                 }
                 
                 try {
-                    fechaCheckOut = LocalDate.parse(value.getCheckOut(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                    fechaCheckOut = LocalDate.parse(value.getCheckOut(), FORMATO_FECHA_VALIDATOR);
                 } catch (DateTimeParseException e) {
                     throw new DataException(ERROR_FECHA_CHECKOUT_NOVALIDA);
                 }

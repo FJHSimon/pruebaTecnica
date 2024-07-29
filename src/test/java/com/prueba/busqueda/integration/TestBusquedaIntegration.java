@@ -3,6 +3,8 @@ package com.prueba.busqueda.integration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prueba.busqueda.domain.model.AltaBusquedaRequest;
 import com.prueba.busqueda.domain.model.AltaBusquedaResponse;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.BeforeAll;
 
 
 /**
@@ -40,11 +43,21 @@ public class TestBusquedaIntegration {
     @Autowired
     private TestRestTemplate testRestTemplate;
 
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    
     private static HttpHeaders headers;
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private static String fechaPosteriorAHoyUnDia;
+    private static String fechaPosteriorAHoyDosDias;
     
     private String crearURL() {
         return "http://localhost:" + port + contextPath;
+    }
+    
+    @BeforeAll
+    public static void prepararDatosPrueba() {
+        fechaPosteriorAHoyUnDia = LocalDate.now().plusDays(1).format(FORMATTER);
+        fechaPosteriorAHoyDosDias = LocalDate.now().plusDays(2).format(FORMATTER);
     }
     
     @Test
@@ -52,12 +65,7 @@ public class TestBusquedaIntegration {
         headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         
-        String peticion = objectMapper.writeValueAsString(new AltaBusquedaRequest.Builder()
-                .hotelId("123abc")
-                .checkIn("20/08/2024")
-                .checkOut("25/08/2024")
-                .ages(Arrays.asList(4, 7, 23, 45))
-                .build());
+        String peticion = objectMapper.writeValueAsString(new AltaBusquedaRequest("123abc", fechaPosteriorAHoyUnDia, fechaPosteriorAHoyDosDias, Arrays.asList(4, 7, 23, 45)));
         
         HttpEntity<String> entity = new HttpEntity<>(peticion, headers);
         ResponseEntity<AltaBusquedaResponse> response = testRestTemplate.exchange(

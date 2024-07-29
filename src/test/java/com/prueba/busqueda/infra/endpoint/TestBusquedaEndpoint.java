@@ -77,12 +77,7 @@ class TestBusquedaEndpoint {
         final List<Integer> lista = new LinkedList<>();
         lista.add(1);
 
-        final var request = new AltaBusquedaRequest.Builder()
-                .hotelId("12345")
-                .checkIn(fechaPosteriorAHoyUnDia)
-                .checkOut(fechaPosteriorAHoyDosDias)
-                .ages(lista)
-                .build();
+        final var request = new AltaBusquedaRequest("12345", fechaPosteriorAHoyUnDia, fechaPosteriorAHoyDosDias, lista);
 
         doReturn(new AltaBusquedaResponse("1223")).when(busquedaUseCases).altaBusqueda(request);
 
@@ -104,10 +99,10 @@ class TestBusquedaEndpoint {
         lista.add(1);
         
         return Stream.of(
-            Arguments.of("hotelId", "El ID de hotel no puede ser nulo", new AltaBusquedaRequest.Builder().checkIn(fechaPosteriorAHoyUnDia).checkOut(fechaPosteriorAHoyDosDias).ages(lista).build()),
-            Arguments.of("checkIn", "La fecha de checkIn no puede estar vacia", new AltaBusquedaRequest.Builder().hotelId("123456").checkOut(fechaPosteriorAHoyDosDias).ages(lista).build()),
-            Arguments.of("checkOut", "La fecha de checkOut no puede estar vacia", new AltaBusquedaRequest.Builder().hotelId("123456").checkIn(fechaPosteriorAHoyUnDia).ages(lista).build()),
-            Arguments.of("ages", "La lista de edades no puede ser nula", new AltaBusquedaRequest.Builder().hotelId("123456").checkIn(fechaPosteriorAHoyUnDia).checkOut(fechaPosteriorAHoyDosDias).build())
+            Arguments.of("hotelId", "El ID de hotel no puede ser nulo", new AltaBusquedaRequest(null, fechaPosteriorAHoyUnDia, fechaPosteriorAHoyDosDias, lista)),
+            Arguments.of("checkIn", "La fecha de checkIn no puede estar vacia", new AltaBusquedaRequest("123456", null, fechaPosteriorAHoyDosDias, lista)),
+            Arguments.of("checkOut", "La fecha de checkOut no puede estar vacia", new AltaBusquedaRequest("123456", fechaPosteriorAHoyUnDia, null, lista)),
+            Arguments.of("ages", "La lista de edades no puede ser nula", new AltaBusquedaRequest("123456", fechaPosteriorAHoyUnDia, fechaPosteriorAHoyDosDias, null))
         );
     }
 
@@ -142,11 +137,11 @@ class TestBusquedaEndpoint {
         lista.add(1);
         
         return Stream.of(
-            Arguments.of("La fecha de entrada no es valida", new AltaBusquedaRequest.Builder().hotelId("123456").checkIn("1234").checkOut(fechaPosteriorAHoyDosDias).ages(lista).build()),
-            Arguments.of("La fecha de salida no es valida", new AltaBusquedaRequest.Builder().hotelId("123456").checkIn(fechaPosteriorAHoyUnDia).checkOut("1234").ages(lista).build()),
-            Arguments.of("La fecha de entrada no puede ser anterior al dia de hoy", new AltaBusquedaRequest.Builder().hotelId("123456").checkIn(fechaAnteriorAHoy).checkOut(fechaPosteriorAHoyUnDia).ages(lista).build()),
-            Arguments.of("La fecha de salida no puede ser anterior al dia de hoy", new AltaBusquedaRequest.Builder().hotelId("123456").checkIn(fechaPosteriorAHoyUnDia).checkOut(fechaAnteriorAHoy).ages(lista).build()),
-            Arguments.of("La fecha de salida no puede ser anterior a la fecha de entrada", new AltaBusquedaRequest.Builder().hotelId("123456").checkIn(fechaPosteriorAHoyDosDias).checkOut(fechaPosteriorAHoyUnDia).ages(lista).build())
+            Arguments.of("La fecha de entrada no es valida", new AltaBusquedaRequest("123456", "1234", fechaPosteriorAHoyDosDias, lista)),
+            Arguments.of("La fecha de salida no es valida", new AltaBusquedaRequest("123456", fechaPosteriorAHoyUnDia, "1234", lista)),
+            Arguments.of("La fecha de entrada no puede ser anterior al dia de hoy", new AltaBusquedaRequest("123456", fechaAnteriorAHoy, fechaPosteriorAHoyUnDia, lista)),
+            Arguments.of("La fecha de salida no puede ser anterior al dia de hoy", new AltaBusquedaRequest("123456", fechaPosteriorAHoyUnDia, fechaAnteriorAHoy, lista)),
+            Arguments.of("La fecha de salida no puede ser anterior a la fecha de entrada", new AltaBusquedaRequest("123456", fechaPosteriorAHoyDosDias, fechaPosteriorAHoyUnDia, lista))
         );
     }
 

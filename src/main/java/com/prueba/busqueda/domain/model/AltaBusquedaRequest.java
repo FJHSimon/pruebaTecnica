@@ -1,5 +1,7 @@
 package com.prueba.busqueda.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 import jakarta.validation.constraints.NotEmpty;
@@ -12,32 +14,33 @@ import com.prueba.busqueda.shared.utils.GeneratedJacocoExcluded;
  *
  * @author fhidalgo
  */
-public class AltaBusquedaRequest {
+public final class AltaBusquedaRequest {
 
     @Schema(description = "ID Hotel", name = "hotelId", example = "1234aBc")
     @NotEmpty(message = ERROR_HOTEL_ID_REQUIRED)
-    private String hotelId;
+    private final String hotelId;
 
     @Schema(description = "Fecha de entrada", name = "checkIn", example = "08/07/2024")
     @NotEmpty(message = ERROR_FECHA_ENTRADA_VACIA)
-    private String checkIn;
+    private final String checkIn;
 
     @Schema(description = "Fecha de salida", name = "checkOut", example = "11/07/2024")
     @NotEmpty(message = ERROR_FECHA_SALIDA_VACIA)
-    private String checkOut;
+    private final String checkOut;
 
     @Schema(description = "ID Hotel", name = "ages", type = "object", example = "[30, 29, 1, 3]")
     @NotNull(message = ERROR_AGES_REQUIRED)
-    private List<Integer> ages;
+    private final List<Integer> ages;
 
-    public AltaBusquedaRequest() {
-
-    }
-
+    @JsonCreator
     public AltaBusquedaRequest(
+            @JsonProperty("hotelId")
             final String hotelId,
+            @JsonProperty("checkIn")
             final String checkIn,
+            @JsonProperty("checkOut")
             final String checkOut,
+            @JsonProperty("ages")
             final List<Integer> ages) {
 
         this.hotelId = hotelId;
@@ -50,32 +53,16 @@ public class AltaBusquedaRequest {
         return hotelId;
     }
 
-    public void setHotelId(String hotelId) {
-        this.hotelId = hotelId;
-    }
-
     public String getCheckIn() {
         return checkIn;
-    }
-
-    public void setCheckIn(String checkIn) {
-        this.checkIn = checkIn;
     }
 
     public String getCheckOut() {
         return checkOut;
     }
 
-    public void setCheckOut(String checkOut) {
-        this.checkOut = checkOut;
-    }
-
     public List<Integer> getAges() {
         return ages;
-    }
-
-    public void setAges(List<Integer> ages) {
-        this.ages = ages;
     }
 
     @GeneratedJacocoExcluded("no incluido en los test")
@@ -128,38 +115,4 @@ public class AltaBusquedaRequest {
         return hash;
     }
 
-    public static class Builder {
-
-        private String hotelId;
-        private String checkIn;
-        private String checkOut;
-        private List<Integer> ages;
-
-        public Builder() {
-        }
-
-        public Builder hotelId(String hotelId) {
-            this.hotelId = hotelId;
-            return this;
-        }
-
-        public Builder checkIn(String checkIn) {
-            this.checkIn = checkIn;
-            return this;
-        }
-
-        public Builder checkOut(String checkOut) {
-            this.checkOut = checkOut;
-            return this;
-        }
-
-        public Builder ages(List<Integer> ages) {
-            this.ages = ages;
-            return this;
-        }
-
-        public AltaBusquedaRequest build() {
-            return new AltaBusquedaRequest(hotelId, checkIn, checkOut, ages);
-        }
-    }
 }
