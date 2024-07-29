@@ -37,8 +37,11 @@ import static com.prueba.busqueda.shared.constantes.Errores.*;
 @Validated
 public class BusquedaEndpoint {
 
-    @Autowired 
-    private BusquedaUseCases busquedaUseCases;
+    private final BusquedaUseCases busquedaUseCases;
+
+    public BusquedaEndpoint(final BusquedaUseCases busquedaUseCases) {
+        this.busquedaUseCases = busquedaUseCases;
+    }
     
     @Operation(
             method = POST_METHOD,

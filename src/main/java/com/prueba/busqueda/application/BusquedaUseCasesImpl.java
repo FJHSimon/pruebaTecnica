@@ -10,7 +10,6 @@ import com.prueba.busqueda.domain.model.ObtenerBusquedaResponse;
 import com.prueba.busqueda.shared.defaults.LogSupport;
 import com.prueba.busqueda.shared.infra.spring.kafka.KafkaBusquedaProducer;
 import java.util.concurrent.ExecutionException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -21,11 +20,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class BusquedaUseCasesImpl implements BusquedaUseCases, LogSupport {
 
-    @Autowired
-    public BusquedaRepository busquedaRepository;
+    public final BusquedaRepository busquedaRepository;
+    public final KafkaBusquedaProducer kafkaBusquedaProducer;
 
-    @Autowired
-    public KafkaBusquedaProducer kafkaBusquedaProducer;
+    public BusquedaUseCasesImpl(final BusquedaRepository busquedaRepository, final KafkaBusquedaProducer kafkaBusquedaProducer) {
+        this.busquedaRepository = busquedaRepository;
+        this.kafkaBusquedaProducer = kafkaBusquedaProducer;
+    }
 
     @Override
     public AltaBusquedaResponse altaBusqueda(final AltaBusquedaRequest request) {

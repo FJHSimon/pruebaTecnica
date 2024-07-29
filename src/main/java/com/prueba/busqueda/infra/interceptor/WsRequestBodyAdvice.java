@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prueba.busqueda.shared.defaults.LogSupport;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -19,8 +18,11 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdvice;
 @ControllerAdvice
 public class WsRequestBodyAdvice implements RequestBodyAdvice, LogSupport {
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
+
+    public WsRequestBodyAdvice(final ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
 
     @Override
     public boolean supports(

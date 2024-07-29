@@ -6,7 +6,6 @@ import com.prueba.busqueda.domain.exc.ApiException;
 import com.prueba.busqueda.shared.constantes.domain.model.ErrorApi;
 import jakarta.validation.*;
 import java.nio.file.AccessDeniedException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -31,8 +30,11 @@ public class AppExceptionHandler implements LogSupport {
 
     private static final String HA_OCURRIDO_UN_ERROR = "Ha ocurrido un error: {}";
 
-    @Autowired
-    private MessagesResourceService messagesResourceService;
+    private final MessagesResourceService messagesResourceService;
+
+    public AppExceptionHandler(MessagesResourceService messagesResourceService) {
+        this.messagesResourceService = messagesResourceService;
+    }
 
     @ExceptionHandler(EmptyResultDataAccessException.class)
     protected ResponseEntity<ErrorApi> handleEmptyResultDataAccessException(final EmptyResultDataAccessException exc) {

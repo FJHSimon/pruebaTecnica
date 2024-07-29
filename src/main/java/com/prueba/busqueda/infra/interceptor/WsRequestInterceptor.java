@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -19,8 +18,11 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Component
 public class WsRequestInterceptor implements HandlerInterceptor, LogSupport {
 
-    @Autowired
-    public LoggerConfig loggerConfig;
+    public final LoggerConfig loggerConfig;
+
+    public WsRequestInterceptor(final LoggerConfig loggerConfig) {
+        this.loggerConfig = loggerConfig;
+    }
     
     @Override
     public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response, final Object object) throws IOException {
